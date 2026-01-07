@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shreyash Sali | Portfolio</title>
+    
+    <!-- Google Fonts: Inter (Closest to Apple's San Francisco) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* =========================================
+           CORE VARIABLES & HIG RESET
+           ========================================= */
+        :root {
+            /* DARK MODE (Default) */
+            --bg-color: #000000;
+            --glass-surface: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass-highlight: rgba(255, 255, 255, 0.4);
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --blob-opacity: 0.6;
+            
+            /* Liquid Colors */
+            --accent-blue: #0A84FF; /* Apple Aqua Blue */
+            --accent-purple: #BF5AF2;
+            --accent-cyan: #64D2FF;
+            
+            /* HIG Spacing & Radius */
+            --radius-lg: 24px;
+            --radius-md: 16px;
+        }
+
+        /* LIGHT MODE VARIABLES */
+        [data-theme="light"] {
+            --bg-color: #F5F5F7;
+            --glass-surface: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(0, 0, 0, 0.1);
+            --glass-highlight: rgba(255, 255, 255, 1);
+            --text-primary: #1D1D1F;
+            --text-secondary: #86868B;
+            --blob-opacity: 0.25;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: default;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.5;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        a, button { cursor: pointer; }
+        
+        /* Links in text/cards */
+        .icon-link {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        .icon-link:hover {
+            color: var(--accent-cyan);
+        }
+
+        /* =========================================
+           LIQUID FLUID BACKGROUND
+           ========================================= */
+        .fluid-background {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1; overflow: hidden;
+        }
+
+        .fluid-blob {
+            position: absolute; border-radius: 50%; filter: blur(80px);
+            opacity: var(--blob-opacity);
+            transition: opacity 0.5s ease;
+            animation: float 20s infinite ease-in-out alternate;
+        }
+
+        .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: var(--accent-blue); }
+        .blob-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: var(--accent-purple); animation-delay: -5s; }
+        .blob-3 { top: 40%; left: 40%; width: 40vw; height: 40vw; background: var(--accent-cyan); animation-delay: -10s; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, 50px) scale(1.1); }
+            100% { transform: translate(-20px, -30px) scale(0.9); }
+        }
+
+        /* =========================================
+           GLASSMORPHISM UTILITIES
+           ========================================= */
+        .glass-panel {
+            background: var(--glass-surface);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative; overflow: hidden;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        /* Light Refraction Shine */
+        .glass-panel::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: skewX(-25deg); transition: 0.5s; pointer-events: none;
+        }
+        .glass-panel:hover::before { left: 150%; transition: 0.7s; }
+
+        .glass-panel:hover {
+            transform: translateY(-5px) scale(1.01);
+            border-color: var(--glass-highlight);
+            box-shadow: 0 20px 50px 0 rgba(0,0,0,0.2);
+        }
+
+        /* =========================================
+           NAVIGATION
+           ========================================= */
+        .navbar {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            width: 95%; max-width: 1000px;
+            padding: 15px 30px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000; border-radius: 50px;
+            
+            /* Highly Transparent Glass Interface */
+            background: rgba(255, 255, 255, 0.01);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* NAME COLOR CHANGE: Strictly White */
+        .logo { 
+            font-weight: 800; 
+            font-size: 1.2rem; 
+            letter-spacing: 0.5px; 
+            color: #FFFFFF !important; /* Forces White */
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        .logo span { color: #FFFFFF !important; } /* Last name also white */
+
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+        .nav-links { display: flex; gap: 30px; list-style: none; }
+        .nav-links a { text-decoration: none; color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--text-primary); }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border);
+            color: var(--text-primary); width: 35px; height: 35px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; transition: 0.3s;
+        }
+        .theme-toggle:hover { background: var(--accent-blue); color: #fff; transform: rotate(20deg); }
+
+        .hamburger { display: none; color: #fff; font-size: 1.2rem; cursor: pointer; }
+
+
+        /* =========================================
+           HERO SECTION
+           ========================================= */
+        .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; position: relative; padding: 0 20px; }
+        .hero-content { z-index: 2; max-width: 900px; }
+        .badge { display: inline-block; padding: 8px 16px; border-radius: 20px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); font-size: 0.85rem; margin-bottom: 20px; backdrop-filter: blur(10px); color: var(--accent-cyan); letter-spacing: 1px; text-transform: uppercase; }
+        
+        .hero-name {
+            font-size: 5rem; font-weight: 800; margin-bottom: 10px; letter-spacing: -2px;
+            color: #FFFFFF !important;
+            text-shadow: 0 0 30px rgba(255,255,255,0.2);
+            animation: fadeIn 1s ease-out;
+        }
+        
+        .hero-tagline { font-size: 1.5rem; color: var(--text-primary); margin-bottom: 40px; font-weight: 300; min-height: 1.5em; }
+
+        /* Typewriter Cursor */
+        .cursor { display: inline-block; width: 3px; background-color: var(--accent-cyan); animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .btn { padding: 14px 32px; border-radius: 30px; font-weight: 600; font-size: 1rem; border: none; transition: all 0.3s; text-decoration: none; position: relative; overflow: hidden; display: inline-block; margin: 0 10px; }
+        .btn-primary { background: #fff; color: #000; }
+        .btn-glass { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px); }
+        .btn:hover { transform: scale(1.05); }
+
+        /* =========================================
+           SECTIONS & COMPONENTS
+           ========================================= */
+        section { padding: 100px 5%; position: relative; z-index: 2; }
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-title { font-size: 2.5rem; font-weight: 700; color: var(--text-primary); }
+
+        /* About & Timeline */
+        .about-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 40px; align-items: start; }
+        .profile-img-container { position: relative; border-radius: var(--radius-lg); padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); }
+        .profile-img { width: 100%; border-radius: 16px; display: block; }
+        
+        .timeline-container { max-width: 800px; margin: 0 auto; position: relative; }
+        .timeline-line { position: absolute; left: 20px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--accent-blue), var(--accent-purple)); z-index: 0; }
+        .timeline-item { position: relative; margin-bottom: 40px; padding-left: 60px; }
+        .timeline-dot { position: absolute; left: 11px; top: 20px; width: 20px; height: 20px; background: var(--bg-color); border: 4px solid var(--accent-cyan); border-radius: 50%; z-index: 1; transition: background-color 0.5s ease; }
+        .timeline-card { padding: 30px; }
+        .role-title { font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin-bottom: 5px; }
+        .company-name { color: var(--accent-blue); font-weight: 600; }
+        .duration { font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 10px; }
+
+	 /* Projects */
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
+        .project-card { display: flex; flex-direction: column; justify-content: space-between; height: 100%; padding: 30px; }
+        .project-category { font-size: 0.75rem; text-transform: uppercase; color: var(--accent-purple); font-weight: 700; margin-bottom: 10px; }
+        .project-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 10px; }
+        .project-desc { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 20px; }
+        .card-actions { margin-top: auto; padding-top: 15px; border-top: 1px solid var(--glass-border); }
+
+        /* Skills Grid */
+        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+        .skill-card { padding: 30px; display: flex; flex-direction: column; height: 100%; }
+        .skill-title {
+            font-size: 1.1rem; color: var(--accent-cyan); margin-bottom: 15px;
+            border-bottom: 1px solid var(--glass-border); padding-bottom: 10px; font-weight: 600;
+        }
+        .skill-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+        .skill-tag {
+            background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
+            color: var(--text-secondary); padding: 8px 16px; border-radius: 20px;
+            font-size: 0.85rem; font-weight: 500; transition: all 0.3s;
+        }
+        .skill-card:hover .skill-tag { border-color: var(--accent-blue); color: var(--text-primary); }
+        .skill-tag:hover { background: var(--accent-blue); color: #fff !important; transform: translateY(-2px); }
+
+        
+        /* Services */
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .service-card { padding: 40px 30px; text-align: center; }
+        .service-icon { font-size: 2.5rem; margin-bottom: 20px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* Contact */
+        .contact-wrapper { max-width: 600px; margin: 0 auto; }
+        .form-input { width: 100%; padding: 16px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: var(--radius-md); color: var(--text-primary); outline: none; transition: 0.3s; margin-bottom: 20px; font-family: inherit; }
+        .form-input:focus { border-color: var(--accent-blue); background: rgba(255,255,255,0.08); }
+
+        footer { text-align: center; padding: 40px; color: var(--text-secondary); font-size: 0.9rem; }
+
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 1s ease; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; gap: 10px; background: rgba(0,0,0,0.9); }
+            .nav-right { width: 100%; justify-content: center; }
+            .nav-links { display: none; }
+            .hamburger { display: block; position: absolute; right: 30px; top: 20px; }
+            .hero-name { font-size: 3rem; }
+            .about-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+
+    <!-- Fluid Background -->
+    <div class="fluid-background">
+        <div class="fluid-blob blob-1"></div>
+        <div class="fluid-blob blob-2"></div>
+        <div class="fluid-blob blob-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">Shreyash <span>Sali</span></div>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+		<li><a href="#Developed">Launched</a></li>
+                <li><a href="#projects">Work</a></li>
+                <li><a href="#experience">experience</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <!-- Theme Toggle -->
+            <button class="theme-toggle" id="theme-btn" title="Toggle Theme"><i class="fas fa-sun"></i></button>
+            <div class="hamburger"><i class="fas fa-bars"></i></div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="badge">Available for Work</div>
+            <h1 class="hero-name">Shreyash Sali</h1>
+            
+            <!-- Typewriter Effect -->
+            <div class="hero-tagline">
+                I am a <span class="txt-type" data-wait="2000" data-words='["Full Stack Developer", "MERN Stack Developer", "Android App Developer"]'></span><span class="cursor">|</span>
+            </div>
+            
+            <div class="cta-container">
+                <a href="#projects" class="btn btn-primary">View Work</a>
+                <a href="https://docs.google.com/document/d/1l1g-cY--SL401SqrwB6acS9eQN9344-HbaUZ5EsaWfk/edit?usp=sharing" target="_blank" class="btn btn-glass"><i class="fas fa-download"></i> Resume</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="section-header reveal">
+            <h2 class="section-title">Who I Am</h2>
+        </div>
+        <div class="about-grid">
+            <div class="profile-img-container glass-panel reveal" data-tilt>
+                <!-- Placeholder Image - Replace with your actual photo link if needed -->
+                <img src="https://drive.google.com/thumbnail?id=1uoTY0nusr5boA8YtriEuLIqLjNN-ucOJ&sz=w600" alt="Shreyash Sali" class="profile-img">
+            </div>
+            <div class="glass-panel" style="padding: 40px;" data-tilt>
+                <div class="reveal">
+                    <h3 class="role-title" style="margin-bottom: 20px; color: var(--accent-cyan);">Passionate Developer</h3>
+                    <p class="bio-text" style="color: var(--text-secondary); margin-bottom: 15px;">
+                        I am a motivated and detail-oriented B.Tech graduate with a strong passion for software development. I enjoy building practical applications and continuously improving my skills through hands-on projects, certifications, and real-world problem solving.
+                    </p>
+                    <p class="bio-text" style="color: var(--text-secondary);">
+                        My interests include web development, backend systems, and integrating modern tools like AI and cloud services into applications.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Developed & Launched -->
+    <section id="Developed">
+        <div class="section-header reveal">
+            <h2 class="section-title">Developed Work</h2>
+        </div>
+        <div class="projects-grid">
+	
+            <div class="glass-panel project-card reveal" data-tilt>
+                <div>
+                    <div class="project-category">Full-Stack Web Application</div>
+                    <h3 class="project-title">CareerSetu – Job Discovery Platform</h3>
+		    <span class="company-name">Fully developed and launched by me, covering the complete end-to-end development lifecycle—from idea and architecture to coding, testing, deployment, and live production.</span>
+                    <p class="project-desc">A Flask-based job discovery web platform that aggregates listings from multiple job portals, featuring user authentication, search filters, saved jobs, and cloud deployment.</p>
+                </div>
+                <div class="card-actions">
+                    <a href="https://carrersetu.com" target="_blank" class="icon-link"><i class="fab fa-google"></i> 🌐 Visit Website</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <div class="section-header reveal">
+            <h2 class="section-title">Selected Works</h2>
+        </div>
+        <div class="projects-grid">
+
+            <div class="glass-panel project-card reveal" data-tilt>
+                <div>
+                    <div class="project-category">AI / Cloud-Based Web Application</div>
+                    <h3 class="project-title">Cloud Finder</h3>
+                    <p class="project-desc">CloudFinder is an AI-powered cloud marketplace discovery tool that uses fuzzy matching and intelligent similarity scoring to identify vendor solutions across AWS, Azure, and GCP..</p>
+                </div>
+                <div class="card-actions">
+                    <a href="https://github.com/shreyashsali44/CloudFinder" target="_blank" class="icon-link"><i class="fab fa-github"></i> Code</a>
+                </div>
+            </div>
+
+            <div class="glass-panel project-card reveal" data-tilt>
+                <div>
+                    <div class="project-category">Web Application</div>
+                    <h3 class="project-title">MERN Event Platform</h3>
+                    <p class="project-desc">Full-stack app implementing user authentication and CRUD operations.</p>
+                </div>
+                <div class="card-actions">
+                    <a href="https://github.com/shreyashsali44/mern-event-platform" target="_blank" class="icon-link"><i class="fab fa-github"></i> Code</a>
+                </div>
+            </div>
+
+            <div class="glass-panel project-card reveal" data-tilt>
+                <div>
+                    <div class="project-category">AI / Backend</div>
+                    <h3 class="project-title">Real-Time AI Chatbot</h3>
+                    <p class="project-desc">Live message streaming using WebSockets and FastAPI backend.</p>
+                </div>
+                <div class="card-actions">
+                    <a href="https://github.com/shreyashsali44/tecnvirons-realtime-ai-backend" target="_blank" class="icon-link"><i class="fab fa-github"></i> Code</a>
+                </div>
+            </div>
+
+            <div class="glass-panel project-card reveal" data-tilt>
+                <div>
+                    <div class="project-category">Web System</div>
+                    <h3 class="project-title">Salary Management</h3>
+                    <p class="project-desc">Calculates salaries, stores records, and generates salary slips.</p>
+                </div>
+                <div class="card-actions">
+                    <a href="https://github.com/shreyashsali44/salary-app" target="_blank" class="icon-link"><i class="fab fa-github"></i> Code</a>
+                </div>
+            </div>
+
+            <div class="glass-panel project-card reveal" data-tilt>
+                <div>
+                    <div class="project-category">Security</div>
+                    <h3 class="project-title">Secure Print & Audit</h3>
+                    <p class="project-desc">Flask-based web app requiring employee authentication before printing.</p>
+                </div>
+                <div class="card-actions">
+                    <a href="https://github.com/shreyashsali44/PrintAuthProject" target="_blank" class="icon-link"><i class="fab fa-github"></i> Code</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Experience Timeline -->
+    <section id="experience">
+        <div class="section-header reveal">
+            <h2 class="section-title">Timeline</h2>
+        </div>
+        <div class="timeline-container">
+            <div class="timeline-line"></div>
+
+            <!-- Internship -->
+            <div class="timeline-item reveal">
+                <div class="timeline-dot"></div>
+                <div class="glass-panel timeline-card" data-tilt>
+                    <span class="duration">1 Jan 2026 -(Full-Time)</span>
+                    <h3 class="role-title">Full Stack Developer Intern</h3>
+                    <span class="company-name">CloudTaru Infotech Private Limited</span>
+                    <p class="bio-text" style="font-size: 0.95rem; margin-top: 10px; color: var(--text-secondary);">
+                        HITEC City Hyderabad, Telangana
+                    </p>
+                    <p class="bio-text" style="font-size: 0.95rem; margin-top: 10px; color: var(--text-secondary);">
+                        Worked on cloud-based application developed using Angular for the frontend, Node.js for backend services, and PostgreSQL as the database.
+                    </p>
+                </div>
+            </div>
+     
+            <!-- Education -->
+            <div class="timeline-item reveal">
+                <div class="timeline-dot"></div>
+                <div class="glass-panel timeline-card" data-tilt>
+                    <span class="duration">Aug 2022 - June 2026</span>
+                    <h3 class="role-title">B.Tech in Computer Science & Engineering</h3>
+                    <span class="company-name">MGM's Jawaharlal Nehru Engineering College</span>
+                    <p class="bio-text" style="font-size: 0.95rem; margin-top: 10px; color: var(--text-secondary);">
+                        Chhatrapati Sambhajinagar, Maharashtra
+                    </p>
+                    <p class="bio-text" style="font-size: 0.95rem; margin-top: 10px; color: var(--text-secondary);">
+                        Focused on Software Engineering, Data Structures, and Web Technologies.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SKILLS SECTION -->
+    <section id="skills">
+        <div class="section-header reveal">
+            <h2 class="section-title">Technical Expertise</h2>
+        </div>
+        <div class="skills-grid">
+
+            <!-- Programming Languages -->
+            <div class="glass-panel skill-card reveal" data-tilt>
+                <div class="skill-title"><i class="fas fa-code"></i> Programming Languages</div>
+                <div class="skill-tags">
+                    <span class="skill-tag">Java</span>
+                    <span class="skill-tag">Python</span>
+                    <span class="skill-tag">JavaScript</span>
+                    <span class="skill-tag">SQL</span>
+                    <span class="skill-tag">HTML5</span>
+                    <span class="skill-tag">CSS3</span>
+                </div>
+            </div>
+
+            <!-- Web Development -->
+            <div class="glass-panel skill-card reveal" data-tilt>
+                <div class="skill-title"><i class="fas fa-globe"></i> Web Development (MERN)</div>
+                <div class="skill-tags">
+                    <span class="skill-tag">MongoDB</span>
+                    <span class="skill-tag">Express.js</span>
+                    <span class="skill-tag">React.js</span>
+                    <span class="skill-tag">Node.js</span>
+                </div>
+            </div>
+
+            <!-- Android App Development -->
+            <div class="glass-panel skill-card reveal" data-tilt>
+                <div class="skill-title"><i class="fas fa-mobile-alt"></i> Android App Development</div>
+                <div class="skill-tags">
+                    <span class="skill-tag">Java</span>
+                    <span class="skill-tag">XML</span>
+                    <span class="skill-tag">Firebase Auth</span>
+                    <span class="skill-tag">Realtime Database</span>
+                </div>
+            </div>
+
+            <!-- Backend & APIs -->
+            <div class="glass-panel skill-card reveal" data-tilt>
+                <div class="skill-title"><i class="fas fa-server"></i> Backend & APIs</div>
+                <div class="skill-tags">
+                    <span class="skill-tag">Flask</span>
+                    <span class="skill-tag">FastAPI</span>
+                    <span class="skill-tag">RESTful APIs</span>
+                </div>
+            </div>
+
+            <!-- Databases -->
+            <div class="glass-panel skill-card reveal" data-tilt>
+                <div class="skill-title"><i class="fas fa-database"></i> Databases</div>
+                <div class="skill-tags">
+                    <span class="skill-tag">MySQL</span>
+                    <span class="skill-tag">MongoDB</span>
+                    <span class="skill-tag">PostgreSQL</span>
+                    <span class="skill-tag">Firebase Realtime Database</span>
+                </div>
+            </div>
+
+            <!-- AI / ML -->
+            <div class="glass-panel skill-card reveal" data-tilt>
+                <div class="skill-title"><i class="fas fa-brain"></i> AI / ML</div>
+                <div class="skill-tags">
+                    <span class="skill-tag">Python (NumPy, Pandas)</span>
+                    <span class="skill-tag">TensorFlow/Keras</span>
+                    <span class="skill-tag">OpenCV</span>
+                </div>
+            </div>
+
+            <!-- Tools & Platforms -->
+            <div class="glass-panel skill-card reveal" data-tilt>
+                <div class="skill-title"><i class="fas fa-tools"></i> Tools & Platforms</div>
+                <div class="skill-tags">
+                    <span class="skill-tag">Git & GitHub</span>
+                    <span class="skill-tag">Android Studio</span>
+                    <span class="skill-tag">Eclipse</span>
+                    <span class="skill-tag">VS Code</span>
+                    <span class="skill-tag">XAMPP</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services">
+        <div class="section-header reveal">
+            <h2 class="section-title">Capabilities</h2>
+        </div>
+        <div class="services-grid">
+            <div class="glass-panel service-card reveal" data-tilt>
+                <i class="fas fa-layer-group service-icon"></i>
+                <h3 style="margin-bottom: 10px;">Full Stack Web</h3>
+                <p class="bio-text" style="font-size: 0.9rem; color: var(--text-secondary);">MERN, Flask, FastAPI</p>
+            </div>
+            <div class="glass-panel service-card reveal" data-tilt>
+                <i class="fas fa-brain service-icon"></i>
+                <h3 style="margin-bottom: 10px;">AI Solutions</h3>
+                <p class="bio-text" style="font-size: 0.9rem; color: var(--text-secondary);">Automation & Processing</p>
+            </div>
+            <div class="glass-panel service-card reveal" data-tilt>
+                <i class="fas fa-mobile-alt service-icon"></i>
+                <h3 style="margin-bottom: 10px;">Android Dev</h3>
+                <p class="bio-text" style="font-size: 0.9rem; color: var(--text-secondary);">Native Apps & Firebase</p>
+            </div>
+            <div class="glass-panel service-card reveal" data-tilt>
+                <i class="fas fa-database service-icon"></i>
+                <h3 style="margin-bottom: 10px;">Backend Systems</h3>
+                <p class="bio-text" style="font-size: 0.9rem; color: var(--text-secondary);">API Design & DB Mgmt</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+        <div class="section-header reveal">
+            <h2 class="section-title">Connect</h2>
+        </div>
+        <div class="contact-wrapper">
+            <div class="glass-panel" style="padding: 40px;" data-tilt>
+                <form onsubmit="return false;">
+                    <input type="text" class="form-input" placeholder="Your Name" required>
+                    <input type="email" class="form-input" placeholder="Your Email" required>
+                    <textarea class="form-input" rows="5" placeholder="Your Message" required></textarea>
+                    <button class="btn btn-primary" style="width: 100%;">Send Message</button>
+                </form>
+
+                <div style="margin-top: 30px; text-align: center; display: flex; justify-content: center; gap: 20px;">
+                    <a href="https://github.com/shreyashsali44" class="icon-link"><i class="fab fa-github fa-2x"></i></a>
+                    <a href="https://www.linkedin.com/in/shreyash-sali-b78a9827a" class="icon-link"><i class="fab fa-linkedin fa-2x"></i></a>
+                    <a href="mailto:shreeyashsali17@gmail.com" class="icon-link"><i class="fas fa-envelope fa-2x"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Shreyash Sali.</p>
+    </footer>
+
+    <!-- JavaScript Interactions -->
+    <script>
+        // 1. Dark/Light Mode Toggle
+        const themeBtn = document.getElementById('theme-btn');
+        const themeIcon = themeBtn.querySelector('i');
+        const body = document.body;
+
+        themeBtn.addEventListener('click', () => {
+            if (body.getAttribute('data-theme') === 'light') {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                body.setAttribute('data-theme', 'light');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        });
+
+        // 2. Typewriter Effect
+        class TypeWriter {
+            constructor(txtElement, words, wait = 3000) {
+                this.txtElement = txtElement;
+                this.words = words;
+                this.txt = '';
+                this.wordIndex = 0;
+                this.wait = parseInt(wait, 10);
+                this.type();
+                this.isDeleting = false;
+            }
+
+            type() {
+                const current = this.wordIndex % this.words.length;
+                const fullTxt = this.words[current];
+
+                if(this.isDeleting) {
+                    this.txt = fullTxt.substring(0, this.txt.length - 1);
+                } else {
+                    this.txt = fullTxt.substring(0, this.txt.length + 1);
+                }
+
+                this.txtElement.innerHTML = this.txt;
+
+                let typeSpeed = 100;
+                if(this.isDeleting) typeSpeed /= 2;
+
+                if(!this.isDeleting && this.txt === fullTxt) {
+                    typeSpeed = this.wait;
+                    this.isDeleting = true;
+                } else if(this.isDeleting && this.txt === '') {
+                    this.isDeleting = false;
+                    this.wordIndex++;
+                    typeSpeed = 500;
+                }
+
+                setTimeout(() => this.type(), typeSpeed);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const txtElement = document.querySelector('.txt-type');
+            if(txtElement) {
+                const words = JSON.parse(txtElement.getAttribute('data-words'));
+                const wait = txtElement.getAttribute('data-wait');
+                new TypeWriter(txtElement, words, wait);
+            }
+        });
+
+        // 3. Scroll Reveal
+        const revealElements = document.querySelectorAll('.reveal');
+        function checkReveal() {
+            const windowHeight = window.innerHeight;
+            const elementVisible = 100;
+            revealElements.forEach(reveal => {
+                const elementTop = reveal.getBoundingClientRect().top;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveal.classList.add('active');
+                }
+            });
+        }
+        window.addEventListener('scroll', checkReveal);
+        window.addEventListener('load', checkReveal); // Run on load
+
+        // 4. 3D Tilt Effect
+        document.addEventListener('mousemove', (e) => {
+            document.querySelectorAll('[data-tilt]').forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                // Only tilt if mouse is roughly over the element
+                if (x >= -20 && x <= rect.width + 20 && y >= -20 && y <= rect.height + 20) {
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    // Limit rotation to be subtle
+                    const rotateX = ((y - centerY) / centerY) * -3; 
+                    const rotateY = ((x - centerX) / centerX) * 3;
+                    
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+                } else {
+                    card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale(1)`;
+                }
+            });
+        });
+
+        // 5. Mobile Menu
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        hamburger.addEventListener('click', () => {
+            if(navLinks.style.display === 'flex') {
+                navLinks.style.display = 'none';
+            } else {
+                navLinks.style.display = 'flex';
+                navLinks.style.flexDirection = 'column';
+                navLinks.style.position = 'absolute';
+                navLinks.style.top = '60px';
+                navLinks.style.right = '0';
+                navLinks.style.background = 'rgba(0,0,0,0.9)';
+                navLinks.style.padding = '20px';
+                navLinks.style.borderRadius = '10px';
+            }
+        });
+    </script>
+</body>
+</html>
